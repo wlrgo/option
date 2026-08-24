@@ -3,7 +3,8 @@
 //
 // It follows the Rust Option API as closely as Go allows, rather than
 // reshaping it into an idiomatic Go design. It also provides Go helpers such
-// as [FromPtr], [Option.Get], and [Option.OkOr] where Rust has no equivalent.
+// as [FromOK], [FromPtr], [Option.Get], [Option.Ptr], and [Option.OkOr] where
+// Rust has no equivalent.
 //
 // # Construction
 //
@@ -13,10 +14,12 @@
 //
 // # Methods and functions
 //
-// Operations that work with a single [Option] and do not need extra type
-// parameters are methods. Package-level functions are used when an operation
-// must introduce another type, such as [And], [AndThen], [Map], and
-// [Flatten], or an additional constraint, such as [Compare] and [Equal].
+// Operations on a single [Option] are methods, including those that introduce
+// another type, such as [Option.And], [Option.AndThen], [Option.Map], and
+// [Option.ZipWith]. Package-level functions are used for construction
+// ([Some], [None], [FromOK], [FromPtr]), collecting ([Collect]), flattening a
+// nested [Option] ([Flatten]), and operations that need an extra constraint,
+// such as [Compare] and [Equal].
 //
 // # API
 //
@@ -26,10 +29,12 @@
 // Extracting: [Option.Expect], [Option.Unwrap], [Option.UnwrapOr],
 // [Option.UnwrapOrDefault], [Option.UnwrapOrElse].
 //
-// Combining: [And], [AndThen], [Option.Or], [Option.OrElse], [Option.Xor].
+// Combining: [Option.And], [Option.AndThen], [Option.Or], [Option.OrElse],
+// [Option.Xor].
 //
-// Transforming: [Map], [MapOr], [MapOrDefault], [MapOrElse], [Flatten],
-// [ZipWith], [Option.Filter], [Option.Inspect], [Option.Reduce].
+// Transforming: [Option.Map], [Option.MapOr], [Option.MapOrDefault],
+// [Option.MapOrElse], [Flatten], [Option.ZipWith], [Option.Filter],
+// [Option.Inspect], [Option.Reduce].
 //
 // Comparing: [Compare], [Equal], [Ge], [Gt], [Le], [Lt]. [None] is less than
 // any [Some].
@@ -47,8 +52,8 @@
 // # Evaluation
 //
 // Combinators that take a fallback value evaluate it before the call:
-// [And], [Option.Or], [Option.UnwrapOr], [MapOr], [Option.OkOr], and
-// [Option.GetOrInsert]. Use the Else or With variants to compute a fallback
+// [Option.And], [Option.Or], [Option.UnwrapOr], [Option.MapOr], [Option.OkOr],
+// and [Option.GetOrInsert]. Use the Else or With variants to compute a fallback
 // only when it is needed.
 //
 // # Mutation
